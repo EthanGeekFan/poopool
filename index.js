@@ -13,7 +13,7 @@ async function main() {
         logger.info(`A miner joined from ${req.socket.remoteAddress}:${req.socket.remotePort}`);
         ws.on("message", async (message) => {
             message = message.toString();
-            console.log("Received: " + message);
+            logger.verbose("Received: " + message);
             try {
                 const data = JSON.parse(message);
                 switch (data.type) {
