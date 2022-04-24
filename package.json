@@ -1,0 +1,25 @@
+{
+  "name": "poop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@noble/ed25519": "^1.6.0",
+    "body-parser": "^1.20.0",
+    "canonicalize": "^1.0.8",
+    "express": "^4.17.3",
+    "mongoose": "^6.3.1",
+    "winston": "^3.7.2",
+    "ws": "^8.5.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.6",
+    "utf-8-validate": "^5.0.9"
+  }
+}
