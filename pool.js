@@ -12,7 +12,7 @@ const miners = [];
 let currentState = {
     publicKey: null,
     privateKey: null,
-    height: 0, // default to 0
+    height: 1, // default to 1
     prev_id: "00000000a420b7cefa2b7730243316921ed59ffe836e111ca3801f82a4f5360e", // default to genesis block
     block: null,
     coinbase: null,
