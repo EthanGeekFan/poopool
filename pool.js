@@ -84,7 +84,7 @@ async function nextBlock() {
         type: "block",
         txids: [coinbaseHash],
         previd: currentState.prev_id,
-        created: Date.now(),
+        created: (Date.now() / 1000) | 0,
         T: target,
         miner: "Blockheads PooPool",
         note: "This is for sale. Please contact us if you want to buy it.",
