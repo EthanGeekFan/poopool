@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const { MinedBlock } = require('./models');
 const canonicalize = require('canonicalize');
 const { logger } = require('./utils');
+const { namey } = require('./name_generator');
 
 const target = "00000002af000000000000000000000000000000000000000000000000000000";
 const nonceChunkSize = 0x1000000000000000000000000000000000000000000000000000000000000;
@@ -86,8 +87,8 @@ async function nextBlock() {
         previd: currentState.prev_id,
         created: (Date.now() / 1000) | 0,
         T: target,
-        miner: "Blockheads PooPool",
-        note: "This is for sale. Please contact us if you want to buy it.",
+        miner: await namey.new()[0],
+        note: "",
         nonce: "null",
     }
     currentState.block = newBlock;
