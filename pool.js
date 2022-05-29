@@ -87,7 +87,7 @@ async function nextBlock() {
         previd: currentState.prev_id,
         created: (Date.now() / 1000) | 0,
         T: target,
-        miner: await namey.new()[0],
+        miner: (await namey.new())[0],
         note: "",
         nonce: "null",
     }
