@@ -42,6 +42,7 @@ async function main() {
                             type: "gpu_task",
                             task: await getNextGPUTask(),
                         }));
+                        break;
                     default:
                         throw new Error("Unknown message type: " + data.type);
                 }
