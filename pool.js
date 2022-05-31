@@ -27,9 +27,9 @@ async function getNextGPUTask() {
         await currentState.updating;
     }
     const block_split = canonicalize(currentState.block).split('null');
-    const nonce_start_str = currentState.nonce.toString(16);
+    let nonce_start_str = currentState.nonce.toString(16);
     nonce_start_str = Array(64 - nonce_start_str.length).fill('0').join('') + nonce_start_str;
-    const nonce_end_str = (currentState.nonce + nonceChunkSize).toString(16);
+    let nonce_end_str = (currentState.nonce + nonceChunkSize).toString(16);
     nonce_end_str = Array(64 - nonce_end_str.length).fill('0').join('') + nonce_end_str;
     const nonce_start_arr = [
         parseInt(nonce_start_str.slice(0, 8), 16),
