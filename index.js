@@ -43,7 +43,7 @@ async function main() {
                             task: await getNextGPUTask(),
                         }));
                     default:
-                        throw new Error("Unknown message type");
+                        throw new Error("Unknown message type: " + data.type);
                 }
             } catch (err) {
                 console.error(err);
