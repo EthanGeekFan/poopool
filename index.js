@@ -1,6 +1,6 @@
 const { WebSocket } = require('ws');
 const { initDatabase } = require('./database');
-const { initPool, saveBlock, getNextTask, minerJoin, minerLeave, getMiners } = require('./pool');
+const { initPool, saveBlock, getNextTask, getNextGPUTask, minerJoin, minerLeave, getMiners } = require('./pool');
 const { logger } = require('./utils');
 
 async function main() {
