@@ -22,6 +22,46 @@ let currentState = {
     updating: null,
 };
 
+async function getNextGPUTask() {
+    if (currentState.updating !== null) {
+        await currentState.updating;
+    }
+    const block_split = canonicalize(currentState.block).split('null');
+    const nonce_start_str = currentState.nonce.toString(16);
+    nonce_start_str = Array(64 - nonce_start_str.length).fill('0').join('') + nonce_start_str;
+    const nonce_end_str = (currentState.nonce + nonceChunkSize).toString(16);
+    nonce_end_str = Array(64 - nonce_end_str.length).fill('0').join('') + nonce_end_str;
+    const nonce_start_arr = [
+        parseInt(nonce_start_str.slice(0, 8), 16),
+        parseInt(nonce_start_str.slice(8, 16), 16),
+        parseInt(nonce_start_str.slice(16, 24), 16),
+        parseInt(nonce_start_str.slice(24, 32), 16),
+        parseInt(nonce_start_str.slice(32, 40), 16),
+        parseInt(nonce_start_str.slice(40, 48), 16),
+        parseInt(nonce_start_str.slice(48, 56), 16),
+        parseInt(nonce_start_str.slice(56, 64), 16),
+    ];
+    const nonce_end_arr = [
+        parseInt(nonce_end_str.slice(0, 8), 16),
+        parseInt(nonce_end_str.slice(8, 16), 16),
+        parseInt(nonce_end_str.slice(16, 24), 16),
+        parseInt(nonce_end_str.slice(24, 32), 16),
+        parseInt(nonce_end_str.slice(32, 40), 16),
+        parseInt(nonce_end_str.slice(40, 48), 16),
+        parseInt(nonce_end_str.slice(48, 56), 16),
+        parseInt(nonce_end_str.slice(56, 64), 16),
+    ];
+    const task = {
+        nonce_start: nonce_start_arr,
+        nonce_end: nonce_end_arr,
+        block_prefix: block_split[0],
+        block_suffix: block_split[1],
+        target: target,
+    }
+    currentState.nonce += nonceChunkSize;
+    return task;
+}
+
 async function getNextTask() {
     if (currentState.updating !== null) {
         await currentState.updating;
@@ -156,6 +196,7 @@ module.exports = {
     saveBlock,
     poolState,
     getNextTask,
+    getNextGPUTask,
     minerJoin,
     minerLeave,
     getMiners,

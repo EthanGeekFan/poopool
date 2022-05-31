@@ -37,6 +37,11 @@ async function main() {
                             task: await getNextTask(),
                         }));
                         break;
+                    case "gpu_task":
+                        ws.send(JSON.stringify({
+                            type: "gpu_task",
+                            task: await getNextGPUTask(),
+                        }));
                     default:
                         throw new Error("Unknown message type");
                 }
