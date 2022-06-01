@@ -18,6 +18,7 @@ let currentState = {
     block: null,
     coinbase: null,
     coinbaseHash: null,
+    prev_time: null,
     nonce: 0,
     updating: null,
 };
@@ -120,13 +121,16 @@ async function nextBlock() {
     const coinbaseHash = hash(canonicalize(coinbase));
     currentState.coinbase = coinbase;
     currentState.coinbaseHash = coinbaseHash;
-    logger.info(`prev block time: ${currentState.block.created}`);
+    if (currentState.prev_time === null) {
+        currentState.prev_time = (Date.now() / 1000) | 0;
+        logger.info(`prev_time: ${currentState.prev_time}`);
+    }
     // Generate a new block
     const newBlock = {
         type: "block",
         txids: [coinbaseHash],
         previd: currentState.prev_id,
-        created: currentState.block ? currentState.block.created + 2 : (Date.now() / 1000) | 0,
+        created: currentState.prev_timer + 2,
         T: target,
         miner: (await namey.new())[0],
         note: " ",
