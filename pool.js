@@ -120,6 +120,7 @@ async function nextBlock() {
     const coinbaseHash = hash(canonicalize(coinbase));
     currentState.coinbase = coinbase;
     currentState.coinbaseHash = coinbaseHash;
+    logger.info(`prev block time: ${currentState.block.created}`);
     // Generate a new block
     const newBlock = {
         type: "block",
