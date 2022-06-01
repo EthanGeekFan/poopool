@@ -130,7 +130,7 @@ async function nextBlock() {
         type: "block",
         txids: [coinbaseHash],
         previd: currentState.prev_id,
-        created: currentState.prev_timer + 2,
+        created: currentState.prev_time + 2,
         T: target,
         miner: (await namey.new())[0],
         note: " ",
