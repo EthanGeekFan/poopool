@@ -128,7 +128,7 @@ async function nextBlock() {
         created: (Date.now() / 1000) | 0,
         T: target,
         miner: (await namey.new())[0],
-        note: "",
+        note: " ",
         nonce: "null",
     }
     currentState.block = newBlock;
