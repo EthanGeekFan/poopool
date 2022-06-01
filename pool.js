@@ -6,7 +6,7 @@ const { logger } = require('./utils');
 const { namey } = require('./name_generator');
 
 const target = "00000002af000000000000000000000000000000000000000000000000000000";
-const nonceChunkSize = 0x10000000000000000000000000000000000000000000000000000000;
+const nonceChunkSize = 0x10000000000000000000000000000000000000000000000000000000000;
 
 const miners = [];
 
@@ -125,7 +125,7 @@ async function nextBlock() {
         type: "block",
         txids: [coinbaseHash],
         previd: currentState.prev_id,
-        created: (Date.now() / 1000) | 0,
+        created: currentState.block ? currentState.block.created + 2 : (Date.now() / 1000) | 0,
         T: target,
         miner: (await namey.new())[0],
         note: " ",
