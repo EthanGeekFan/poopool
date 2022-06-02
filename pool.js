@@ -125,12 +125,13 @@ async function nextBlock() {
         currentState.prev_time = (Date.now() / 1000) | 0;
         logger.info(`prev_time: ${currentState.prev_time}`);
     }
+    currentState.prev_time += 2;
     // Generate a new block
     const newBlock = {
         type: "block",
         txids: [coinbaseHash],
         previd: currentState.prev_id,
-        created: currentState.prev_time + 2,
+        created: currentState.prev_time,
         T: target,
         miner: (await namey.new())[0],
         note: " ",
