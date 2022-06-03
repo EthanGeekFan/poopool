@@ -52,6 +52,8 @@ Stopping and cleaning of the MongoDB container is also easy:
 npm run stopdb
 ```
 
+This MongoDB container is completely independent of your machine. It maps the local `db` folder in the project root directory for data storage. You can delete or drop any database you want. If you want to reset the mongo database, just delete the `db` directory and restart the db.
+
 #### Start the server
 
 Run the server:
