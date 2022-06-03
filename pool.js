@@ -160,8 +160,8 @@ function varifyBlock(block) {
 }
 
 async function saveBlock(block) {
+    varifyBlock(block);
     currentState.updating = new Promise((resolve, reject) => {
-        varifyBlock(block);
         const blockHash = hash(block);
         const minedBlock = new MinedBlock({
             block: block,
