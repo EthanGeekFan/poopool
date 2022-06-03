@@ -134,3 +134,9 @@ dist
 
 # Databases
 db
+
+# VS Code
+.vscode
+
+# IDEA
+.idea
