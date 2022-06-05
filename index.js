@@ -1,5 +1,6 @@
 const { WebSocket } = require('ws');
 const { initDatabase } = require('./database');
+const { Contributor } = require('./models');
 const { initPool, saveBlock, getNextTask, getNextGPUTask, minerJoin, minerLeave, getMiners } = require('./pool');
 const { logger } = require('./utils');
 
@@ -19,6 +20,16 @@ async function main() {
                 switch (data.type) {
                     case "submit":
                         await saveBlock(data.block);
+                        if (data.SUNetID) {
+                            Contributor.findOneAndUpdate({ SUNetID: data.SUNetID }, { $inc: { credit: 1 } }, { upsert: true }).exec()
+                                .then((profile) => {
+                                    logger.info(`${data.SUNetID} contributed 1 credit`);
+                                    ws.send(JSON.stringify({ type: "confirm", SUNetID: data.SUNetID, credit: profile.credit }));
+                                })
+                                .catch(() => {
+                                    ws.send(JSON.stringify({ type: "error", message: "Failed to update contributor profile" }));
+                                });
+                        }
                         try {
                             getMiners().forEach(miner => {
                                 if (miner !== ws) {

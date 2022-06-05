@@ -33,4 +33,22 @@ const minedBlockSchema = new mongoose.Schema({
 
 const MinedBlock = mongoose.model("MinedBlock", minedBlockSchema);
 
-module.exports = { MinedBlock };
+const contributorSchema = new mongoose.Schema({
+    credit: {
+        type: Number,
+        default: 0,
+    },
+    SUNetID: {
+        type: String,
+        required: true,
+        unique: true,
+        index: true
+    }
+}, { versionKey: false });
+
+const Contributor = mongoose.model("Contributor", contributorSchema);
+
+module.exports = {
+    MinedBlock,
+    Contributor,
+};
