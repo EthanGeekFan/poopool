@@ -22,12 +22,13 @@ async function main() {
                         await saveBlock(data.block);
                         if (data.SUNetID) {
                             Contributor.findOneAndUpdate({ SUNetID: data.SUNetID }, { $inc: { credit: 1 } }, { upsert: true }).exec()
-                                .then((profile) => {
+                                .then(() => {
                                     logger.info(`${data.SUNetID} contributed 1 credit`);
-                                    ws.send(JSON.stringify({ type: "confirm", SUNetID: data.SUNetID, credit: profile.credit }));
+                                    ws.send(JSON.stringify({ type: "confirm", SUNetID: data.SUNetID }));
                                 })
                                 .catch(() => {
                                     ws.send(JSON.stringify({ type: "error", message: "Failed to update contributor profile" }));
+                                    logger.error(`Failed to update contributor profile for ${data.SUNetID}: ${err}`);
                                 });
                         }
                         try {
