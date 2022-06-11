@@ -4,6 +4,7 @@ const { MinedBlock } = require('./models');
 const canonicalize = require('canonicalize');
 const { logger } = require('./utils');
 const { namey } = require('./name_generator');
+const { getChainTip, getObject, getMempool, broadcast } = require("./client");
 
 const target = "00000002af000000000000000000000000000000000000000000000000000000";
 const nonceChunkSize = 0x10000000000000000000000000000000000000000000000000000000000;
@@ -98,7 +99,7 @@ async function initPool() {
         currentState.prev_id = tip.blockid;
     }
     // start mining
-    await nextBlock();
+    await nextHonestBlock();
 }
 
 async function nextBlock() {
@@ -141,6 +142,44 @@ async function nextBlock() {
     logger.info("Generated new block: " + JSON.stringify(currentState));
 }
 
+async function nextHonestBlock() {
+    // Generate a new keypair
+    let privateKey = ed.utils.randomPrivateKey();
+    let publicKey = await ed.getPublicKey(privateKey);
+    currentState.publicKey = Buffer.from(publicKey).toString('hex');
+    currentState.privateKey = Buffer.from(privateKey).toString('hex');
+    // Generate a new coinbase transaction
+    const coinbase = {
+        height: currentState.height,
+        outputs: [
+            {
+                pubkey: currentState.publicKey,
+                value: 5e13,
+            }
+        ],
+        type: "transaction",
+    }
+    const coinbaseHash = hash(canonicalize(coinbase));
+    currentState.coinbase = coinbase;
+    currentState.coinbaseHash = coinbaseHash;
+    // previd and prev block
+    const tipHash = await getChainTip();
+    // const tipBlock = await getObject(tipHash);
+    const mempool = await getMempool();
+    const newBlock = {
+        type: "block",
+        txids: [...mempool],
+        previd: tipHash,
+        created: (Date.now() / 1000) | 0,
+        T: target,
+        miner: (await namey.new())[0],
+        note: "yyang29/loraxie/alanzal",
+        nonce: "null",
+    }
+    currentState.block = newBlock;
+    logger.info("Generated new honest block: " + JSON.stringify(currentState));
+}
+
 function varifyBlock(block) {
     // Verify the pow
     const blockHash = hash(block);
@@ -178,7 +217,9 @@ async function saveBlock(block) {
         currentState.coinbase = null;
         currentState.coinbaseHash = null;
         currentState.nonce = 0;
-        nextBlock().finally(() => {
+        // broadcast
+        broadcast(block);
+        nextHonestBlock().finally(() => {
             resolve();
         });
     })
